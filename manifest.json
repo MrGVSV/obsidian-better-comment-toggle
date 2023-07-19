@@ -1,9 +1,9 @@
 {
-	"id": "better-markdown-comments",
-	"name": "Better Markdown Comments",
+	"id": "better-comment-toggle",
+	"name": "Better Comment Toggle",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Improved behavior for Markdown comments.",
+	"description": "Improved comment toggling.",
 	"author": "Gino Valente",
 	"authorUrl": "https://github.com/MrGVSV",
 	"fundingUrl": "https://github.com/sponsors/MrGVSV",

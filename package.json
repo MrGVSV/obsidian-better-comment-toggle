@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-better-markdown-comments",
+	"name": "obsidian-better-comment-toggle",
 	"version": "1.0.0",
-	"description": "Improved behavior for Markdown comments.",
+	"description": "Improved comment toggling.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
