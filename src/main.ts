@@ -1,11 +1,9 @@
 import { Editor, MarkdownView, Plugin } from 'obsidian';
-import { comparePos, getCommentTokens, Ordering } from './utility';
+import { comparePos, extractEditorView, Ordering, shouldDenyComment } from './utility';
 import { LineCommentController } from './toggle';
-import { SettingsTab } from './settings';
+import { DEFAULT_SETTINGS, Settings, SettingsTab } from './settings';
 import { EditorView } from '@codemirror/view';
 import { CommentViewPlugin } from './extensions';
-import { Settings } from './settings';
-import { DEFAULT_SETTINGS } from './settings';
 
 export default class BetterMarkdownCommentsPlugin extends Plugin {
 	public settings: Settings;
@@ -76,13 +74,7 @@ export default class BetterMarkdownCommentsPlugin extends Plugin {
 
 	private get activeEditorView(): EditorView | undefined {
 		const editor = this.app.workspace.activeEditor?.editor;
-		if (!editor) {
-			return undefined;
-		}
-
-		// https://docs.obsidian.md/Plugins/Editor/Communicating+with+editor+extensions
-		// @ts-expect-error: not typed
-		return editor.cm as EditorView;
+		return editor ? extractEditorView(editor) : undefined;
 	}
 
 	private onToggleComment(editor: Editor) {
@@ -96,11 +88,9 @@ export default class BetterMarkdownCommentsPlugin extends Plugin {
 
 		const hasSelection = comparePos(anchor, head) !== Ordering.Equal;
 
-		const [commentStart] = getCommentTokens(this.settings);
-
 		if (!hasSelection && editor.getLine(from.line).trim().length === 0) {
 			// Allow turning single empty lines into comments
-			controller.toggle(from.line);
+			const { commentStart } = controller.toggle(from.line);
 			editor.transaction({
 				changes: controller.takeChanges(),
 				selection: {
@@ -119,38 +109,46 @@ export default class BetterMarkdownCommentsPlugin extends Plugin {
 		for (let line = from.line; line <= to.line; line++) {
 			// === Skip Empty Lines === //
 			const text = editor.getLine(line);
-			if (text.trim().length === 0) {
+			if (shouldDenyComment(text)) {
 				continue;
 			}
 
 			// === Toggle Line === //
-			const { before, after } = controller.toggle(line, {
+			const { before, after, commentStart } = controller.toggle(line, {
 				forceComment: !rangeState || rangeState === 'mixed',
 			});
 			const wasChanged = before.isCommented !== after.isCommented;
 			const headBefore = { ...selection.head };
 
+			// If the comment string is empty, it shouldn't affect selection
+			const commentLength = commentStart.length > 0 ? commentStart.length + 1 : 0;
+
 			// === Update Selection === //
 			// --- Anchor --- //
 			if (line === anchor.line && wasChanged) {
-				selection.anchor.ch = after.isCommented
-					? anchor.ch + commentStart.length + 1
-					: anchor.ch - commentStart.length - 1;
-
-				selection.anchor.ch = Math.clamp(selection.anchor.ch, 0, after.text.length);
+				selection.anchor.ch = Math.clamp(
+					anchor.ch + (after.isCommented ? commentLength : -commentLength),
+					0,
+					after.text.length,
+				);
 			}
 
 			// --- Head --- //
 			if (line === head.line && wasChanged) {
-				selection.head.ch = after.isCommented
-					? head.ch + commentStart.length + 1
-					: head.ch - commentStart.length - 1;
-
-				selection.head.ch = Math.clamp(selection.head.ch, 0, after.text.length);
+				selection.head.ch = Math.clamp(
+					head.ch + (after.isCommented ? commentLength : -commentLength),
+					0,
+					after.text.length,
+				);
 			}
 
 			// === Drop Cursor === //
-			if (this.settings.dropCursor && !hasSelection && selection.head.line !== editor.lastLine()) {
+			if (
+				this.settings.dropCursor &&
+				!hasSelection &&
+				selection.head.line !== editor.lastLine() &&
+				commentLength > 0
+			) {
 				selection.head.line = Math.min(selection.head.line + 1, editor.lastLine());
 				selection.head.ch = Math.min(
 					// If at start of line -> keep at start of next line
@@ -161,7 +159,7 @@ export default class BetterMarkdownCommentsPlugin extends Plugin {
 						? Infinity
 						: // If just commented -> account for start comment token
 						after.isCommented
-						? selection.head.ch - commentStart.length - 1
+						? selection.head.ch - commentLength
 						: selection.head.ch,
 					editor.getLine(selection.head.line).length,
 				);

@@ -1,5 +1,5 @@
 import { Editor, EditorChange } from 'obsidian';
-import { buildCommentString, escapeRegex, getCommentTokens } from '../utility';
+import { buildCommentString, shouldDenyComment, escapeRegex, findCodeLang, getCommentTokens } from '../utility';
 import { Settings } from '../settings';
 import { LineState, RangeState, ToggleResult } from './types';
 
@@ -35,25 +35,31 @@ export class LineCommentController {
 		const original = this.editor.getLine(line);
 		const indent = Math.max(original.search(/\S/), 0);
 
-		const lineState = this.lineState(line);
-		const { isCommented, text } = lineState;
+		const { state, commentStart, commentEnd } = this.lineState(line);
+		const { isCommented, text } = state;
+
+		if (commentStart.length === 0 && commentEnd.length === 0) {
+			return { before: state, after: state, commentStart, commentEnd };
+		}
 
 		if (isCommented) {
 			if (options.forceComment) {
 				// Line is commented -> do nothing
-				return { before: lineState, after: lineState };
+				return { before: state, after: state, commentStart, commentEnd };
 			}
 
 			// Line is commented -> uncomment
 			this.addChange(line, text, indent);
-			return { before: lineState, after: { isCommented: false, text } };
+			return { before: state, after: { isCommented: false, text }, commentStart, commentEnd };
 		} else {
 			// Line is uncommented  -> comment
-			const newText = buildCommentString(text, this.settings);
+			const newText = buildCommentString(text, commentStart, commentEnd);
 			this.addChange(line, newText, indent);
 			return {
-				before: lineState,
+				before: state,
 				after: { isCommented: true, text: newText },
+				commentStart,
+				commentEnd,
 			};
 		}
 	}
@@ -65,12 +71,11 @@ export class LineCommentController {
 		let rangeState: RangeState | null = null;
 		for (let line = fromLine; line <= toLine; line++) {
 			const text = this.editor.getLine(line);
-			if (text.trim().length === 0) {
-				// Skip empty lines
+			if (shouldDenyComment(text)) {
 				continue;
 			}
 
-			const { isCommented } = this.lineState(line);
+			const { isCommented } = this.lineState(line).state;
 
 			switch (rangeState) {
 				case null:
@@ -94,26 +99,29 @@ export class LineCommentController {
 	/**
 	 * Get the current comment state of the given line.
 	 */
-	private lineState(line: number): LineState {
-		const regex = this.buildCommentRegex();
+	private lineState(line: number): LineStateResult {
+		const lang = findCodeLang(this.editor, line);
+		const [commentStart, commentEnd] = getCommentTokens(this.settings, lang);
+
+		const regex = this.buildCommentRegex(commentStart, commentEnd);
 		const text = this.editor.getLine(line);
 		const matches = regex.exec(text);
 
 		if (matches === null) {
-			return { isCommented: false, text: text.trim() };
+			return { state: { isCommented: false, text: text.trim() }, commentStart, commentEnd };
 		}
 
 		const innerText = matches[1];
-		return { isCommented: true, text: innerText.trim() };
+		return { state: { isCommented: true, text: innerText.trim() }, commentStart, commentEnd };
 	}
 
 	/**
-	 * Build a regex that matches the comment tokens according to the current {@link Settings}.
+	 * Build a regex that matches the comment tokens according to the line's context and
+	 * current {@link Settings}.
 	 *
 	 * Contains one unnamed capture group containing the text between the comment tokens.
 	 */
-	private buildCommentRegex(): RegExp {
-		const [commentStart, commentEnd] = getCommentTokens(this.settings);
+	private buildCommentRegex(commentStart: string, commentEnd: string): RegExp {
 		const start = escapeRegex(commentStart);
 		const end = escapeRegex(commentEnd);
 		return new RegExp(`${start}\\s*(.*)\\s*${end}`);
@@ -137,4 +145,10 @@ export class LineCommentController {
 
 interface ToggleOptions {
 	forceComment?: boolean;
+}
+
+interface LineStateResult {
+	state: LineState;
+	commentStart: string;
+	commentEnd: string;
 }

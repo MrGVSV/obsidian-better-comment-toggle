@@ -342,7 +342,8 @@ export class SettingsTab extends PluginSettingTab {
 	 */
 	private updateExample() {
 		if (this.example) {
-			this.example.textContent = buildCommentString('This is a comment', this.plugin.settings);
+			const { customCommentStart, customCommentEnd } = this.plugin.settings;
+			this.example.textContent = buildCommentString('This is a comment', customCommentStart, customCommentEnd);
 			this.example.addClass('cm-comment');
 			this.plugin.settings.overrideAppearance &&
 				this.example.setAttr('style', buildStyleString(this.plugin.settings.appearance));

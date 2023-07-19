@@ -17,4 +17,12 @@ export type RangeState = 'uncommented' | 'commented' | 'mixed';
 export interface ToggleResult {
 	before: LineState;
 	after: LineState;
+	/**
+	 * The tokens used to comment the line (start).
+	 */
+	commentStart: string;
+	/**
+	 * The tokens used to comment the line (end).
+	 */
+	commentEnd: string;
 }
