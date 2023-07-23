@@ -1,5 +1,12 @@
 import { Editor, EditorChange } from 'obsidian';
-import { buildCommentString, escapeRegex, findCodeLang, getCommentTokens, shouldDenyComment } from '../utility';
+import {
+	buildCommentString,
+	escapeRegex,
+	findCodeLang,
+	getCommentTokens,
+	isMathBlock,
+	shouldDenyComment,
+} from '../utility';
 import { Settings } from '../settings';
 import { LineState, RangeState, ToggleResult } from './types';
 
@@ -70,8 +77,7 @@ export class LineCommentController {
 	public rangeState(fromLine: number, toLine: number): RangeState | null {
 		let rangeState: RangeState | null = null;
 		for (let line = fromLine; line <= toLine; line++) {
-			const text = this.editor.getLine(line);
-			if (shouldDenyComment(text)) {
+			if (shouldDenyComment(this.editor, line)) {
 				continue;
 			}
 
@@ -100,8 +106,7 @@ export class LineCommentController {
 	 * Get the current comment state of the given line.
 	 */
 	private lineState(line: number): LineStateResult {
-		const lang = findCodeLang(this.editor, line);
-		const [commentStart, commentEnd] = getCommentTokens(this.settings, lang);
+		const [commentStart, commentEnd] = this.getLineCommentTokens(line);
 
 		const regex = this.buildCommentRegex(commentStart, commentEnd);
 		const text = this.editor.getLine(line);
@@ -113,6 +118,15 @@ export class LineCommentController {
 
 		const innerText = matches[1];
 		return { state: { isCommented: true, text: innerText.trim() }, commentStart, commentEnd };
+	}
+
+	private getLineCommentTokens(line: number): [string, string] {
+		if (isMathBlock(this.editor, line)) {
+			return ['%', ''];
+		}
+
+		const lang = findCodeLang(this.editor, line);
+		return getCommentTokens(this.settings, lang);
 	}
 
 	/**

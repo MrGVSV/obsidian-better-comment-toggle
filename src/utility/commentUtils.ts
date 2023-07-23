@@ -1,5 +1,7 @@
 import { Settings } from '../settings';
 import { Languages } from '../settings/language';
+import { Editor } from 'obsidian';
+import { containsMathBlockTokens } from './editorUtils';
 
 /**
  * Return a tuple of the start and end comment tokens for the given {@link Settings}.
@@ -47,10 +49,11 @@ export function buildCommentString(text: string, commentStart: string, commentEn
 }
 
 /**
- * Returns true if the given text should not have its comment state toggled by this plugin.
- * @param text The text of the line to check
+ * Returns true if the given line should not have its comment state toggled by this plugin.
  */
-export function shouldDenyComment(text: string): boolean {
-	const txt = text.trim();
-	return txt.length === 0 || txt.startsWith('```');
+export function shouldDenyComment(editor: Editor, line: number): boolean {
+	const text = editor.getLine(line).trim();
+	return (
+		text.length === 0 || text.startsWith('```') || text.startsWith('$$') || containsMathBlockTokens(editor, line)
+	);
 }

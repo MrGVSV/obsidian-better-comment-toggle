@@ -108,8 +108,7 @@ export default class BetterMarkdownCommentsPlugin extends Plugin {
 
 		for (let line = from.line; line <= to.line; line++) {
 			// === Skip Empty Lines === //
-			const text = editor.getLine(line);
-			if (shouldDenyComment(text)) {
+			if (shouldDenyComment(editor, line)) {
 				continue;
 			}
 
@@ -149,6 +148,8 @@ export default class BetterMarkdownCommentsPlugin extends Plugin {
 				selection.head.line !== editor.lastLine() &&
 				commentLength > 0
 			) {
+				const text = editor.getLine(line);
+
 				selection.head.line = Math.min(selection.head.line + 1, editor.lastLine());
 				selection.head.ch = Math.min(
 					// If at start of line -> keep at start of next line
