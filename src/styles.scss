@@ -1,0 +1,10 @@
+.code {
+	color: var(--code-normal);
+	font-size: var(--code-size);
+	font-family: var(--font-monospace);
+	vertical-align: baseline;
+}
+
+.comment {
+	color: var(--code-comment);
+}

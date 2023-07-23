@@ -13,6 +13,7 @@ export interface Settings {
 	 */
 	overrideAppearance: boolean;
 	appearance: CommentAppearance;
+	customLanguages: CustomLanguage[];
 }
 
 export interface CommentAppearance {
@@ -23,6 +24,12 @@ export interface CommentAppearance {
 	weight: number;
 	showOutline: boolean;
 	outlineColor: string;
+}
+
+export interface CustomLanguage {
+	regex: string;
+	commentStart: string;
+	commentEnd: string;
 }
 
 /**

@@ -1,10 +1,11 @@
 import { FlatSettings, Settings, SettingsPath } from './types';
 import { DEFAULT_SETTINGS } from './defaults';
+import { DeepReadonly } from '../utility';
 
 /**
  * Returns the value of the given setting path.
  */
-export function getSetting<P extends SettingsPath>(settings: Settings, path: P): FlatSettings[P] {
+export function getSetting<P extends SettingsPath>(settings: DeepReadonly<Settings>, path: P): FlatSettings[P] {
 	const parts = path.split('.');
 	let obj: unknown = settings;
 	for (const part of parts) {

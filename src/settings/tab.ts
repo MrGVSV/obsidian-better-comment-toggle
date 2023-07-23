@@ -1,8 +1,11 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
+import { App, ButtonComponent, PluginSettingTab, Setting } from 'obsidian';
 import BetterMarkdownCommentsPlugin from '../main';
 import { buildCommentString, buildStyleString } from '../utility';
 import { CommentStyle, SettingsPath } from './types';
 import { isDefaultSettings, restoreSettings } from './utils';
+import styles from './styles.scss';
+import { CustomLanguageList, IconButton, Text } from '../components';
+import { emptyLang } from './defaults';
 
 export class SettingsTab extends PluginSettingTab {
 	private readonly plugin: BetterMarkdownCommentsPlugin;
@@ -18,12 +21,15 @@ export class SettingsTab extends PluginSettingTab {
 	display(): void {
 		this.container.empty();
 
-		this.container.createEl('h2', { text: 'General Settings' });
+		this.container.createEl('h1', { text: 'General Settings', cls: styles.heading });
 		this.createGeneralSection();
 
-		this.container.createEl('h2', { text: 'Comment Appearance' });
+		this.container.createEl('h1', { text: 'Comment Appearance', cls: styles.heading });
 		this.createExampleSection();
 		this.createAppearanceSection();
+
+		this.container.createEl('h1', { text: 'Code Blocks', cls: styles.heading });
+		this.createCodeBlockSection();
 	}
 
 	/**
@@ -244,6 +250,45 @@ export class SettingsTab extends PluginSettingTab {
 		}, overrideAppearance);
 	}
 
+	private createCodeBlockSection() {
+		this.createSection(() => {
+			this.container.addClass(styles.codeBlockSection);
+
+			new Text(this.container).setText('Custom Languages').setVariant('setting-item-name');
+			new Text(this.container)
+				.setText((frag) => {
+					frag.createDiv({
+						cls: 'setting-item-description',
+						text: 'Use the list below to define the comment style for custom code block languages.',
+					});
+					frag.createDiv({
+						cls: 'setting-item-description',
+						text: 'Languages are defined using case-insensitive regex and are checked in ascending order (first in the list has the highest priority).',
+					}).appendText(' The first one to match the language of the code block will be used.');
+
+					return frag;
+				})
+				.setVariant('setting-item-description');
+
+			const list = new CustomLanguageList(this.container)
+				.setLanguages(this.plugin.settings.customLanguages)
+				.onChange(async (languages) => {
+					this.plugin.settings.customLanguages = languages;
+					await this.plugin.saveSettings();
+				})
+				.addClass(styles.customLanguageList);
+
+			new ButtonComponent(this.container)
+				.setButtonText('Add Language')
+				.onClick(async () => {
+					list.pushLang(emptyLang());
+					this.plugin.settings.customLanguages.push(emptyLang());
+					await this.plugin.saveSettings();
+				})
+				.buttonEl.addClass(styles.addButton);
+		});
+	}
+
 	/**
 	 * Add a setting to the current {@link container} element.
 	 *
@@ -271,27 +316,25 @@ export class SettingsTab extends PluginSettingTab {
 			listeners.forEach((cb) => cb());
 		});
 
-		setting.addExtraButton((btn) => {
-			const component = btn
-				.setIcon('reset')
-				.setTooltip('Restore default')
-				.onClick(async () => {
-					restoreSettings(this.plugin.settings, ...paths);
-					await this.plugin.saveSettings();
-					this.plugin.refreshAppearance();
-					this.display();
-				});
+		const resetBtn = new IconButton(setting.controlEl)
+			.setIcon('reset')
+			.setTooltip('Restore default')
+			.onClick(async () => {
+				restoreSettings(this.plugin.settings, ...paths);
+				await this.plugin.saveSettings();
+				this.plugin.refreshAppearance();
+				this.display();
+			});
 
-			const refresh = () => {
-				const isDisabled = isDefaultSettings(this.plugin.settings, ...paths);
-				component.setDisabled(isDisabled);
-				component.extraSettingsEl.style.pointerEvents = isDisabled ? 'none' : 'auto';
-				component.extraSettingsEl.style.filter = isDisabled ? 'opacity(0.5)' : 'unset';
-				component.extraSettingsEl.setAttribute('aria-disabled', isDisabled.toString());
-			};
-			listeners.push(refresh);
-			refresh();
-		});
+		const refresh = () => {
+			const isDisabled = isDefaultSettings(this.plugin.settings, ...paths);
+			resetBtn.setDisabled(isDisabled);
+			resetBtn.extraSettingsEl.style.pointerEvents = isDisabled ? 'none' : 'auto';
+			resetBtn.extraSettingsEl.style.filter = isDisabled ? 'opacity(0.5)' : 'unset';
+			resetBtn.extraSettingsEl.setAttr('aria-disabled', isDisabled);
+		};
+		listeners.push(refresh);
+		refresh();
 
 		return setting;
 	}
@@ -300,16 +343,7 @@ export class SettingsTab extends PluginSettingTab {
 	 * Create a card element.
 	 */
 	private createCard(create: () => void): HTMLDivElement {
-		const card = this.container.createDiv();
-		card.setCssStyles({
-			padding: 'var(--size-4-6) var(--size-4-4)',
-			margin: 'var(--size-4-5) 0',
-			// backgroundColor: 'var(--background-primary-alt)',
-			borderWidth: 'var(--border-width)',
-			borderColor: 'var(--background-modifier-border)',
-			borderStyle: 'solid',
-			borderRadius: 'var(--radius-s)',
-		});
+		const card = this.container.createDiv(styles.card);
 		this.containerStack.push(card);
 		create();
 		this.containerStack.pop();

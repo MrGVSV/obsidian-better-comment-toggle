@@ -1,5 +1,5 @@
 import { Editor, EditorChange } from 'obsidian';
-import { buildCommentString, shouldDenyComment, escapeRegex, findCodeLang, getCommentTokens } from '../utility';
+import { buildCommentString, escapeRegex, findCodeLang, getCommentTokens, shouldDenyComment } from '../utility';
 import { Settings } from '../settings';
 import { LineState, RangeState, ToggleResult } from './types';
 

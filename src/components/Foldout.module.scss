@@ -1,0 +1,39 @@
+.foldout {
+	background-color: var(--background-primary-alt);
+}
+
+.summary {
+	background-color: var(--background-primary-alt);
+	border-radius: var(--radius-s);
+
+	padding: var(--size-4-3) var(--size-4-4) var(--size-4-3) var(--size-4-2);
+
+	&::before {
+		content: '▶︎' / '';
+		display: inline-block;
+		max-width: var(--font-ui-small);
+		font-size: var(--font-ui-small);
+		transition: transform 150ms ease-in-out;
+	}
+
+	&::marker {
+		content: '';
+		display: none;
+	}
+
+	&:focus-visible {
+		box-shadow: 0 0 0 3px var(--background-modifier-border-focus);
+	}
+}
+
+.foldout[open] > .summary {
+	&::before {
+		transform: rotate(90deg);
+	}
+}
+
+.content {
+	border: 1px solid transparent;
+	padding: 0 var(--size-4-4) var(--size-4-3) var(--size-4-2);
+	border-radius: var(--radius-s);
+}

@@ -1,0 +1,20 @@
+.container {
+	display: flex;
+	flex-direction: column;
+
+	overflow: hidden;
+
+	.name {
+		display: block;
+
+		color: var(--text-faint);
+		font-size: var(--font-ui-smaller);
+
+		text-align: start;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+
+		margin: var(--size-4-1) 0;
+	}
+}

@@ -1,4 +1,4 @@
-import { Settings } from './types';
+import { CustomLanguage, Settings } from './types';
 import { DeepReadonly } from '../utility';
 
 export const DEFAULT_SETTINGS: DeepReadonly<Settings> = {
@@ -16,4 +16,16 @@ export const DEFAULT_SETTINGS: DeepReadonly<Settings> = {
 		showOutline: false,
 		outlineColor: '#FFFFFF',
 	},
+	customLanguages: [],
 };
+
+/**
+ * Generates an empty {@link CustomLanguage}.
+ */
+export function emptyLang(): CustomLanguage {
+	return {
+		regex: '',
+		commentStart: '',
+		commentEnd: '',
+	};
+}

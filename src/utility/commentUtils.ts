@@ -6,6 +6,16 @@ import { Languages } from '../settings/language';
  */
 export function getCommentTokens(settings: Settings, lang: string | null): [string, string] {
 	if (lang) {
+		for (const { commentEnd, commentStart, regex } of settings.customLanguages) {
+			if (regex.trim().length === 0) {
+				continue;
+			}
+
+			if (new RegExp(regex, 'i').test(lang)) {
+				return [commentStart, commentEnd];
+			}
+		}
+
 		const standard = Languages.get(lang);
 		if (standard) {
 			return [standard.commentStart, standard.commentEnd];
