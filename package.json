@@ -17,8 +17,8 @@
 		"url": "https://github.com/MrGVSV/obsidian-better-markdown-comments.git"
 	},
 	"devDependencies": {
-		"@codemirror/commands": "latest",
-		"@codemirror/language": "latest",
+		"@codemirror/commands": "6.2.4",
+		"@codemirror/language": "6.8.0",
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
 		"@typescript-eslint/parser": "5.29.0",
