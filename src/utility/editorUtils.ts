@@ -39,16 +39,18 @@ export function findCodeLang(editor: Editor, line: number): string | null {
 	// Find the start of the code block
 	let found = false;
 	let { from, to } = cursor;
-	do {
-		// Find the boundary where the code block starts
-		if (!cursor.type.name.contains('codeblock')) {
+	while (line > 0) {
+		line--;
+		const linePos = view.state.doc.line(line + 1).from;
+		const cursor = syntaxTree(view.state).cursorAt(linePos, 1);
+		if (!cursor.type.name.contains('hmd-codeblock')) {
 			found = true;
 			break;
 		}
 
 		from = cursor.from;
 		to = cursor.to;
-	} while (cursor.prev());
+	}
 
 	if (!found) {
 		return null;
