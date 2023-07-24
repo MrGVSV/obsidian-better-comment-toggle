@@ -1,6 +1,6 @@
 import { App, ButtonComponent, PluginSettingTab, Setting } from 'obsidian';
 import BetterMarkdownCommentsPlugin from '../main';
-import { buildCommentString, buildStyleString } from '../utility';
+import { buildCommentString, buildStyleString, getCommentTokens } from '../utility';
 import { CommentStyle, SettingsPath } from './types';
 import { isDefaultSettings, restoreSettings } from './utils';
 import styles from './styles.scss';
@@ -376,8 +376,8 @@ export class SettingsTab extends PluginSettingTab {
 	 */
 	private updateExample() {
 		if (this.example) {
-			const { customCommentStart, customCommentEnd } = this.plugin.settings;
-			this.example.textContent = buildCommentString('This is a comment', customCommentStart, customCommentEnd);
+			const [commentStart, commentEnd] = getCommentTokens(this.plugin.settings, null);
+			this.example.textContent = buildCommentString('This is a comment', commentStart, commentEnd);
 			this.example.addClass('cm-comment');
 			this.plugin.settings.overrideAppearance &&
 				this.example.setAttr('style', buildStyleString(this.plugin.settings.appearance));
