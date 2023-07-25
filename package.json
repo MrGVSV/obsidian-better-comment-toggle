@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-better-comment-toggle",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Improved comment toggling.",
 	"main": "main.js",
 	"scripts": {

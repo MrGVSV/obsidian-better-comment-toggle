@@ -1,7 +1,7 @@
 {
 	"id": "better-comment-toggle",
 	"name": "Better Comment Toggle",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Improved comment toggling.",
 	"author": "Gino Valente",
