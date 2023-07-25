@@ -21,10 +21,10 @@ export class SettingsTab extends PluginSettingTab {
 	display(): void {
 		this.container.empty();
 
-		this.container.createEl('h1', { text: 'General Settings', cls: styles.heading });
+		this.container.createEl('h1', { text: 'General', cls: styles.heading });
 		this.createGeneralSection();
 
-		this.container.createEl('h1', { text: 'Comment Appearance', cls: styles.heading });
+		this.container.createEl('h1', { text: 'Appearance', cls: styles.heading });
 		this.createExampleSection();
 		this.createAppearanceSection();
 

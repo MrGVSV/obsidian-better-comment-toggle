@@ -3,6 +3,10 @@
 .heading {
 	font-size: var(--font-ui-large);
 	font-weight: var(--h2-size);
+
+	&:not(:first-child) {
+		margin-top: 1.75em;
+	}
 }
 
 .code-block-section {
