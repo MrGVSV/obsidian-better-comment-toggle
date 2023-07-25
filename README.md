@@ -20,6 +20,7 @@
   width="50%" /><img src="https://github.com/MrGVSV/obsidian-better-comment-toggle/blob/main/assets/05_code.gif" alt="Toggling a comment inside a code block" 
   width="50%" /><img src="https://github.com/MrGVSV/obsidian-better-comment-toggle/blob/main/assets/07_latex.gif" alt="Toggling a comment inside a math block" width="50%" />
 </p>
+
 ## Details
 
 This plugin is purely WYSWIG. That is, there are no hidden HTML tags or other metadata embedded into your notes. The comments exist as you see them in the notes. Any additional styling (e.g. font color) is purely cosmetic and exists only in the editor.
