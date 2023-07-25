@@ -13,10 +13,9 @@ export default class BetterMarkdownCommentsPlugin extends Plugin {
 		this.addSettingTab(new SettingsTab(this.app, this));
 
 		this.addCommand({
-			id: 'better-markdown-comments--toggle',
+			id: 'toggle',
 			icon: 'percent',
 			name: 'Toggle Comment',
-			hotkeys: [{ key: '/', modifiers: ['Mod'] }],
 			editorCallback: (editor: Editor, _view: MarkdownView) => {
 				this.onToggleComment(editor);
 			},
