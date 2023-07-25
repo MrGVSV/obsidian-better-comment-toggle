@@ -1,5 +1,6 @@
 import { ExtraButtonComponent } from 'obsidian';
 import styles from './IconButton.module.scss';
+import globalStyles from '../styles.scss';
 
 /**
  * Wrapper component around {@link ExtraButtonComponent} that improves accessibility
@@ -22,7 +23,7 @@ export class IconButton extends ExtraButtonComponent {
 	}
 
 	public override setDisabled(disabled: boolean): this {
-		this.extraSettingsEl.toggleClass(styles.disabled, disabled);
+		this.extraSettingsEl.toggleClass(globalStyles.disabled, disabled);
 		this.extraSettingsEl.setAttr('aria-disabled', disabled);
 		return super.setDisabled(disabled);
 	}

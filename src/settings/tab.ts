@@ -4,6 +4,7 @@ import { buildCommentString, buildStyleString, getCommentTokens } from '../utili
 import { CommentStyle, SettingsPath } from './types';
 import { isDefaultSettings, restoreSettings } from './utils';
 import styles from './styles.scss';
+import globalStyles from '../styles.scss';
 import { CustomLanguageList, IconButton, Text } from '../components';
 import { emptyLang } from './defaults';
 
@@ -163,9 +164,7 @@ export class SettingsTab extends PluginSettingTab {
 						});
 					}).settingEl;
 
-				elt.setCssStyles({
-					borderTop: 'none',
-				});
+				elt.addClass(styles.hideTopBorder);
 
 				return setting;
 			},
@@ -180,7 +179,7 @@ export class SettingsTab extends PluginSettingTab {
 		this.createSection(() => {
 			// Create empty setting to add a border to the section
 			const empty = new Setting(this.container).setDisabled(true).settingEl;
-			empty.setCssStyles({ padding: '0' });
+			empty.addClass(styles.empty);
 			empty.toggleAttribute('inert', true);
 
 			this.add(['appearance.color'], (setting, apply) =>
@@ -357,10 +356,7 @@ export class SettingsTab extends PluginSettingTab {
 	 */
 	private createSection(create: () => void, enabled = true): HTMLDivElement {
 		const section = this.container.createDiv();
-		section.setCssStyles({
-			pointerEvents: enabled ? 'auto' : 'none',
-			filter: enabled ? 'unset' : 'opacity(0.35) brightness(0.85)',
-		});
+		section.toggleClass(globalStyles.disabled, !enabled);
 		section.setAttribute('aria-disabled', (!enabled).toString());
 		section.toggleAttribute('inert', !enabled);
 

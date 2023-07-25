@@ -28,3 +28,11 @@
 	border: var(--border-width) solid var(--background-modifier-border);
 	border-radius: var(--radius-s);
 }
+
+.hide-top-border {
+	border-top: none;
+}
+
+.empty {
+	padding: 0;
+}

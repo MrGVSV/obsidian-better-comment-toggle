@@ -174,8 +174,7 @@
 		}
 
 		&.mobile-add {
-			opacity: 0.35;
-			pointer-events: none;
+			@include disabled;
 		}
 	}
 }

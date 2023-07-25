@@ -8,3 +8,13 @@
 .comment {
 	color: var(--code-comment);
 }
+
+@mixin disabled {
+	pointer-events: none;
+	opacity: 0.35;
+	filter: brightness(0.85);
+}
+
+.disabled {
+	@include disabled;
+}
