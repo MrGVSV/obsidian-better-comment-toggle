@@ -1,95 +1,42 @@
-# Obsidian Sample Plugin
+# Obsidian Better Comment Toggle
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+*Improved comment toggling in Obsidian.*
 
-This project uses Typescript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in Typescript Definition format, which contains TSDoc comments describing what it does.
+## Features
 
-**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
+- Easily toggle comments line-by-line or over a selected range of lines
+- Configure the start and end tokens for toggled comments
+- Change the appearance of commented lines
+- Support for both code and math blocks (including custom languages)
+- Maintains indentation
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+## Demos
 
-## First time developing plugins?
+<p align="center">
+  <img src="./assets/01_single.gif" alt="Toggling lines one-by-one" 
+  width="50%" /><img src="./assets/02_multi.gif" alt="Toggling a selected range of lines" 
+  width="50%" /><img src="./assets/03_tokens.gif" alt="Using custom comment tokens" 
+  width="50%" /><img src="./assets/04_style.gif" alt="Using a custom comment appearance" 
+  width="50%" /><img src="./assets/05_code.gif" alt="Toggling a comment inside a code block" 
+  width="50%" /><img src="./assets/07_latex.gif" alt="Toggling a comment inside a math block" width="50%" />
+</p>
+## Details
 
-Quick starting guide for new plugin devs:
+This plugin is purely WYSWIG. That is, there are no hidden HTML tags or other metadata embedded into your notes. The comments exist as you see them in the notes. Any additional styling (e.g. font color) is purely cosmetic and exists only in the editor.
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+The default comment style is set to HTML (`<!-- -->`), which is the syntax specified by [CommonMark](https://spec.commonmark.org/0.30/#example-624). However, you can configure this plugin to use Obsidian-style comments (`%% %%`), or even define your own!
 
-## Releasing new releases
+### Tips
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the container path of your repository and also in the release.
-- Publish the release.
+It's recommended to replace the existing keybinding for Obsidian's comment toggling command with the one provided by this plugin:
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+- <kbd>⌘</kbd>+<kbd>/</kbd> (Mac)
+- <kbd>Ctrl</kbd>+<kbd>/</kbd> (Windows)
 
-## Adding your plugin to the community plugin list
 
-- Check https://github.com/obsidianmd/obsidian-releases/blob/master/plugin-review.md
-- Publish an initial version.
-- Make sure you have a `README.md` file in the container of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+## Support
 
-## How to use
+This plugin is totally free to use! I have a lot of fun making stuff like this, so I never expect any type of financial compensation. But if you enjoy the plugin and are feeling generous, I certainly won't say no to a cup of coffee!
 
-- Clone this repo.
-- `npm i` or `yarn` to install dependencies
-- `npm run dev` to start compilation in watch mode.
+<a href="https://www.buymeacoffee.com/ginov"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=ginov&button_colour=007a8a&font_colour=ffffff&font_family=Cookie&outline_colour=ffffff&coffee_colour=FFDD00" /></a>
 
-## Manually installing the plugin
-
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api

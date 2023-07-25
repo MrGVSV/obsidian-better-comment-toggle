@@ -6,6 +6,9 @@
 	"description": "Improved comment toggling.",
 	"author": "Gino Valente",
 	"authorUrl": "https://github.com/MrGVSV",
-	"fundingUrl": "https://github.com/sponsors/MrGVSV",
+	"fundingUrl": {
+		"Buy Me a Coffee": "https://www.buymeacoffee.com/ginov",
+		"GitHub Sponsor": "https://github.com/sponsors/MrGVSV"
+	},
 	"isDesktopOnly": false
 }
