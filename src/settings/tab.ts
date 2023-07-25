@@ -57,7 +57,7 @@ export class SettingsTab extends PluginSettingTab {
 				desc.appendText('Changing this value will not update existing comments.');
 
 				return setting
-					.setName('Comment Style')
+					.setName('Comment style')
 					.setDesc(desc)
 					.addDropdown((dropdown) => {
 						dropdown
@@ -94,7 +94,7 @@ export class SettingsTab extends PluginSettingTab {
 					);
 
 					return setting
-						.setName('Custom Comment Style')
+						.setName('Custom comment style')
 						.setDesc(desc)
 						.addText((text) => {
 							text.setPlaceholder('Comment start (e.g. "<!--")')
@@ -122,7 +122,7 @@ export class SettingsTab extends PluginSettingTab {
 			['dropCursor'],
 			(setting, apply) =>
 				setting
-					.setName('Drop Cursor')
+					.setName('Drop cursor')
 					.setDesc('Automatically drop the cursor to the next line after toggling a comment.')
 					.addToggle((toggle) => {
 						toggle.setValue(this.plugin.settings.dropCursor).onChange(async (value) => {
@@ -153,7 +153,7 @@ export class SettingsTab extends PluginSettingTab {
 			['overrideAppearance'],
 			(setting, apply) => {
 				const elt = setting
-					.setName('Override Appearance')
+					.setName('Override appearance')
 					.setDesc('Allow this plugin to override the current comment appearance.')
 					.addToggle((toggle) => {
 						toggle.setValue(overrideAppearance).onChange(async (value) => {
@@ -184,7 +184,7 @@ export class SettingsTab extends PluginSettingTab {
 			empty.toggleAttribute('inert', true);
 
 			this.add(['appearance.color'], (setting, apply) =>
-				setting.setName('Comment Color').addColorPicker((picker) => {
+				setting.setName('Comment color').addColorPicker((picker) => {
 					picker.setValue(appearance.color).onChange(async (value) => {
 						appearance.color = value;
 						await apply();
@@ -194,7 +194,7 @@ export class SettingsTab extends PluginSettingTab {
 
 			this.add(['appearance.showBackground', 'appearance.backgroundColor'], (setting, apply) =>
 				setting
-					.setName('Comment Background')
+					.setName('Comment background')
 					.addToggle((toggle) => {
 						toggle.setValue(appearance.showBackground).onChange(async (value) => {
 							appearance.showBackground = value;
@@ -211,7 +211,7 @@ export class SettingsTab extends PluginSettingTab {
 
 			this.add(['appearance.showOutline', 'appearance.outlineColor'], (setting, apply) =>
 				setting
-					.setName('Comment Outline')
+					.setName('Comment outline')
 					.addToggle((toggle) => {
 						toggle.setValue(appearance.showOutline).onChange(async (value) => {
 							appearance.showOutline = value;
@@ -227,7 +227,7 @@ export class SettingsTab extends PluginSettingTab {
 			).setDisabled(!overrideAppearance);
 
 			this.add(['appearance.italic'], (setting, apply) =>
-				setting.setName('Italicize Comments').addToggle((toggle) => {
+				setting.setName('Italicize comments').addToggle((toggle) => {
 					toggle.setValue(appearance.italic).onChange(async (value) => {
 						appearance.italic = value;
 						await apply();
@@ -236,7 +236,7 @@ export class SettingsTab extends PluginSettingTab {
 			).setDisabled(!overrideAppearance);
 
 			this.add(['appearance.weight'], (setting, apply) =>
-				setting.setName('Comment Font Weight').addSlider((slider) => {
+				setting.setName('Comment font weight').addSlider((slider) => {
 					slider
 						.setLimits(100, 900, 100)
 						.setDynamicTooltip()
@@ -254,7 +254,7 @@ export class SettingsTab extends PluginSettingTab {
 		this.createSection(() => {
 			this.container.addClass(styles.codeBlockSection);
 
-			new Text(this.container).setText('Custom Languages').setVariant('setting-item-name');
+			new Text(this.container).setText('Custom languages').setVariant('setting-item-name');
 			new Text(this.container)
 				.setText((frag) => {
 					frag.createDiv({
