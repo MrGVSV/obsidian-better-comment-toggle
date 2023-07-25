@@ -1,14 +1,33 @@
 @import '../styles';
 
+@mixin mobile-only {
+	@media only screen and (max-width: 800px) {
+		@content;
+	}
+}
+
 .container {
 	display: grid;
-	grid-template-columns: 1fr repeat(3, min-content);
+	grid-template-columns: 1fr min-content;
 	row-gap: 0;
 	align-items: start;
+
+	@include mobile-only {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		width: 100%;
+	}
 }
 
 .foldout {
 	border-radius: var(--radius-s);
+	z-index: 5;
+
+	@include mobile-only {
+		width: 100%;
+		border-bottom-right-radius: 0;
+	}
 }
 
 .summary-section {
@@ -22,7 +41,7 @@
 	outline: var(--border-width) solid var(--background-modifier-border);
 
 	margin: 0 0 0 var(--size-4-2);
-	width: calc(100% - var(--font-ui-small) - var(--size-4-2));
+	width: calc(100% - var(--font-ui-small) - var(--size-4-3));
 
 	.regex {
 		display: inline-flex;
@@ -93,23 +112,70 @@
 	}
 }
 
-.control-button {
-	flex: 0;
-	aspect-ratio: 1 / 1;
-	margin: var(--size-4-4) 0 0 var(--size-4-2);
+.buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	gap: var(--size-4-2);
 
-	&.disabled {
-		opacity: 0.25;
-		pointer-events: none;
+	margin-top: var(--size-4-4);
+	margin-left: var(--size-4-2);
+
+	@include mobile-only {
+		margin-top: 0;
+		padding: var(--size-4-1);
+		border-radius: 0 0 var(--radius-s) var(--radius-s);
+		background-color: var(--background-primary-alt);
+	}
+
+	.control-button {
+		flex: 0;
+		aspect-ratio: 1 / 1;
+
+		&.disabled {
+			opacity: 0.25;
+			pointer-events: none;
+		}
 	}
 }
 
 .add-button {
-	border-radius: 0;
-	padding: var(--size-2-1);
-	min-height: var(--size-4-3);
+	z-index: 10;
 
-	svg {
+	&:not(.mobile-add) {
+		border-radius: 0;
+		padding: var(--size-2-1);
+		min-height: var(--size-4-3);
+
+		svg {
+			display: none;
+		}
+	}
+
+	&.mobile-add {
 		display: none;
+	}
+
+	@include mobile-only {
+		&.mobile-add {
+			display: block;
+		}
+
+		&:not(.mobile-add) {
+			display: none;
+		}
+	}
+
+	&-hidden {
+
+		&:not(.mobile-add) {
+			visibility: hidden;
+		}
+
+		&.mobile-add {
+			opacity: 0.35;
+			pointer-events: none;
+		}
 	}
 }

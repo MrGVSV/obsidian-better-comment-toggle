@@ -17,7 +17,7 @@ export class CustomLanguageBlock extends BaseComponent {
 	private upBtnComponent: IconButton;
 	private downBtnComponent: IconButton;
 	private deleteBtnComponent: IconButton;
-	private addBtnComponent: IconButton;
+	private addBtnComponents: IconButton[];
 	private regexInputComponent: TextInput;
 	private startInputComponent: TextInput;
 	private endInputComponent: TextInput;
@@ -62,20 +62,26 @@ export class CustomLanguageBlock extends BaseComponent {
 			})
 			.rootEl.addClass(styles.foldout);
 
-		this.upBtnComponent = new IconButton(block).setIcon('chevron-up').setTooltip('Shift up');
+		const buttons = block.createDiv(styles.buttons);
+
+		this.upBtnComponent = new IconButton(buttons).setIcon('chevron-up').setTooltip('Shift up');
 		this.upBtnComponent.extraSettingsEl.addClass(styles.controlButton);
-		this.upBtnComponent.extraSettingsEl.role = 'button';
 
-		this.downBtnComponent = new IconButton(block).setIcon('chevron-down').setTooltip('Shift down');
+		this.downBtnComponent = new IconButton(buttons).setIcon('chevron-down').setTooltip('Shift down');
 		this.downBtnComponent.extraSettingsEl.addClass(styles.controlButton);
-		this.downBtnComponent.extraSettingsEl.role = 'button';
 
-		this.deleteBtnComponent = new IconButton(block).setIcon('x').setTooltip('Delete');
+		this.deleteBtnComponent = new IconButton(buttons).setIcon('x').setTooltip('Delete');
 		this.deleteBtnComponent.extraSettingsEl.addClass(styles.controlButton);
-		this.downBtnComponent.extraSettingsEl.role = 'button';
 
-		this.addBtnComponent = new IconButton(block).setIcon('plus').setTooltip('Insert');
-		this.addBtnComponent.extraSettingsEl.addClass(styles.addButton);
+		this.addBtnComponents = [];
+
+		const mobileAddBtn = new IconButton(buttons).setIcon('plus').setTooltip('Insert');
+		mobileAddBtn.extraSettingsEl.addClass(styles.addButton, styles.controlButton, styles.mobileAdd);
+
+		const normalAddBtn = new IconButton(block).setIcon('plus').setTooltip('Insert');
+		normalAddBtn.extraSettingsEl.addClass(styles.addButton);
+
+		this.addBtnComponents = [mobileAddBtn, normalAddBtn];
 
 		return block;
 	}
@@ -133,7 +139,9 @@ export class CustomLanguageBlock extends BaseComponent {
 	}
 
 	public onAdd(callback: (self: this) => any): this {
-		this.addBtnComponent.onClick(() => callback(this));
+		for (const component of this.addBtnComponents) {
+			component.onClick(() => callback(this));
+		}
 		return this;
 	}
 
@@ -153,8 +161,10 @@ export class CustomLanguageBlock extends BaseComponent {
 	}
 
 	public setAddButtonHidden(hidden: boolean): this {
-		this.addBtnComponent.extraSettingsEl.toggleAttribute('disabled', hidden);
-		this.addBtnComponent.extraSettingsEl.toggleVisibility(!hidden);
+		for (const component of this.addBtnComponents) {
+			component.extraSettingsEl.toggleAttribute('disabled', hidden);
+			component.extraSettingsEl.toggleClass(styles.addButtonHidden, hidden);
+		}
 		return this;
 	}
 }
