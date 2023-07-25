@@ -13,12 +13,12 @@
 ## Demos
 
 <p align="center">
-  <img src="./assets/01_single.gif" alt="Toggling lines one-by-one" 
-  width="50%" /><img src="./assets/02_multi.gif" alt="Toggling a selected range of lines" 
-  width="50%" /><img src="./assets/03_tokens.gif" alt="Using custom comment tokens" 
-  width="50%" /><img src="./assets/04_style.gif" alt="Using a custom comment appearance" 
-  width="50%" /><img src="./assets/05_code.gif" alt="Toggling a comment inside a code block" 
-  width="50%" /><img src="./assets/07_latex.gif" alt="Toggling a comment inside a math block" width="50%" />
+  <img src="https://github.com/MrGVSV/obsidian-better-comment-toggle/blob/main/assets/01_single.gif" alt="Toggling lines one-by-one" 
+  width="50%" /><img src="https://github.com/MrGVSV/obsidian-better-comment-toggle/blob/main/assets/02_multi.gif" alt="Toggling a selected range of lines" 
+  width="50%" /><img src="https://github.com/MrGVSV/obsidian-better-comment-toggle/blob/main/assets/03_tokens.gif" alt="Using custom comment tokens" 
+  width="50%" /><img src="https://github.com/MrGVSV/obsidian-better-comment-toggle/blob/main/assets/04_style.gif" alt="Using a custom comment appearance" 
+  width="50%" /><img src="https://github.com/MrGVSV/obsidian-better-comment-toggle/blob/main/assets/05_code.gif" alt="Toggling a comment inside a code block" 
+  width="50%" /><img src="https://github.com/MrGVSV/obsidian-better-comment-toggle/blob/main/assets/07_latex.gif" alt="Toggling a comment inside a math block" width="50%" />
 </p>
 ## Details
 
