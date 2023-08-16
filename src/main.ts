@@ -27,14 +27,15 @@ export default class BetterMarkdownCommentsPlugin extends Plugin {
 	onunload() {}
 
 	async loadSettings() {
-		const storedSettings: Settings = await this.loadData();
+		const storedSettings: Settings | null = await this.loadData();
+		const defaults = DEFAULT_SETTINGS as Settings;
 
 		this.settings = {
-			...DEFAULT_SETTINGS,
+			...defaults,
 			...storedSettings,
 			appearance: {
-				...DEFAULT_SETTINGS.appearance,
-				...storedSettings.appearance,
+				...defaults.appearance,
+				...storedSettings?.appearance,
 			},
 		};
 	}
