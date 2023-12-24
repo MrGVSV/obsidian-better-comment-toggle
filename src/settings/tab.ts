@@ -1,7 +1,7 @@
 import { App, ButtonComponent, PluginSettingTab, Setting } from 'obsidian';
 import BetterMarkdownCommentsPlugin from '../main';
 import { buildCommentString, buildStyleString, getCommentTokens } from '../utility';
-import { CommentStyle, SettingsPath } from './types';
+import { CommentFontTheme, CommentStyle, SettingsPath } from './types';
 import { isDefaultSettings, restoreSettings } from './utils';
 import styles from './styles.scss';
 import globalStyles from '../styles.scss';
@@ -224,6 +224,49 @@ export class SettingsTab extends PluginSettingTab {
 						});
 					}),
 			).setDisabled(!overrideAppearance);
+
+			this.add(['appearance.fontTheme'], (setting, apply) => {
+				const desc = new DocumentFragment();
+				desc.appendText('The font to use for comments.');
+
+				return setting
+					.setName('Comment font')
+					.setDesc(desc)
+					.addDropdown((dropdown) => {
+						dropdown
+							.addOptions({
+								normal: 'Normal',
+								monospace: 'Monospace',
+								custom: 'Custom',
+							} as Record<CommentFontTheme, string>)
+							.setValue(this.plugin.settings.appearance.fontTheme)
+							.onChange(async (value) => {
+								this.plugin.settings.appearance.fontTheme = value as CommentFontTheme;
+								await apply();
+								this.display();
+							});
+					});
+			}).setDisabled(!overrideAppearance);
+
+			if (this.plugin.settings.appearance.fontTheme === 'custom') {
+				this.add(['appearance.customFont'], (setting, apply) => {
+					const desc = new DocumentFragment();
+					desc.appendText('The font-family to use for comments.');
+
+					return setting
+						.setName('Custom font')
+						.setDesc(desc)
+						.addText((text) => {
+							text.setPlaceholder('Arial, sans-serif')
+								.setValue(this.plugin.settings.appearance.customFont)
+								.onChange(async (value) => {
+									// Prevent injecting extra properties into the CSS
+									this.plugin.settings.appearance.customFont = value.trim().split(';')[0];
+									await apply();
+								});
+						});
+				}).setDisabled(!overrideAppearance);
+			}
 
 			this.add(['appearance.italic'], (setting, apply) =>
 				setting.setName('Italicize comments').addToggle((toggle) => {

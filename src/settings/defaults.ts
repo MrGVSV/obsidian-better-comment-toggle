@@ -11,6 +11,8 @@ export const DEFAULT_SETTINGS: DeepReadonly<Settings> = {
 		showBackground: false,
 		backgroundColor: '#191919',
 		color: '#565E67',
+		fontTheme: 'normal',
+		customFont: 'initial',
 		italic: false,
 		weight: 400,
 		showOutline: false,
