@@ -43,7 +43,7 @@ export interface CustomLanguage {
  */
 export type CommentStyle = 'html' | 'obsidian' | 'custom';
 
-export type CommentFontTheme = 'normal' | 'monospace' | 'custom';
+export type CommentFontTheme = 'default' | 'monospace' | 'custom';
 
 export type FlatSettings = Flatten<Settings>;
 export type SettingsPath = keyof FlatSettings;

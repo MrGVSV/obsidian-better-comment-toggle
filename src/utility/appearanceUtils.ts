@@ -19,7 +19,7 @@ export function buildStyleString(appearance: CommentAppearance): string {
 		);
 
 	switch (fontTheme) {
-		case 'normal':
+		case 'default':
 			break;
 		case 'monospace':
 			props.push('font-family: monospace');

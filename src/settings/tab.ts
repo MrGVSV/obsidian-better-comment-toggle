@@ -235,7 +235,7 @@ export class SettingsTab extends PluginSettingTab {
 					.addDropdown((dropdown) => {
 						dropdown
 							.addOptions({
-								normal: 'Normal',
+								default: 'Default',
 								monospace: 'Monospace',
 								custom: 'Custom',
 							} as Record<CommentFontTheme, string>)
