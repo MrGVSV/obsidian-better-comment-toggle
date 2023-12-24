@@ -20,6 +20,8 @@ export interface CommentAppearance {
 	showBackground: boolean;
 	backgroundColor: string;
 	color: string;
+	fontTheme: CommentFontTheme;
+	customFont: string;
 	italic: boolean;
 	weight: number;
 	showOutline: boolean;
@@ -40,6 +42,8 @@ export interface CustomLanguage {
  * - `custom`: Custom comments, specified by {@link Settings.customCommentStart} and {@link Settings.customCommentEnd}.
  */
 export type CommentStyle = 'html' | 'obsidian' | 'custom';
+
+export type CommentFontTheme = 'default' | 'monospace' | 'custom';
 
 export type FlatSettings = Flatten<Settings>;
 export type SettingsPath = keyof FlatSettings;
